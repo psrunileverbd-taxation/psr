@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proof of Submission (PSR) </title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+    <style>
+      .form-container {
+        max-width: 500px;
+        margin: auto;
+        margin-top: 50px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="container">
+      <div class="form-container">
+        <h4 class="text-center mb-4">Proof of Submission (PSR) for <br> Unilever Bangladesh Limited</h4>
+        <form id="submit-to-google-sheet">
+          <div class="form-group">
+            <label for="tin_no">TIN No :</label>
+            <input
+              class="form-control"
+              type="text"
+              name="tin_no"
+              id="tin_no"
+              placeholder="12 Digit TIN"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="taxes_circle">Taxes Circle :</label>
+            <input
+              class="form-control"
+              type="text"
+              name="taxes_circle"
+              id="taxes_circle"
+              placeholder="012"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="slip">Taxes Zone :</label>
+            <input
+              class="form-control"
+              type="text"
+              name="taxes_zone"
+              id="taxes_zone"
+              placeholder="Dhaka"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="return_resgister">Serial No. of Return Register :</label>
+            <input
+              class="form-control"
+              type="text"
+              name="return_resgister"
+              id="return_resgister"
+              placeholder="8261049792"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="return_submission">Date of Return Submission :</label>
+            <input
+              class="form-control"
+              type="date"
+              name="return_submission"
+              id="return_submission"
+              placeholder=""
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="loc">Assessment Year :</label>
+            <select class="form-control" name="assess_year" id="assess_year" required>
+              <option value="" disabled selected hidden>Choose...</option>
+              <option value="2023-2024">2023-2024</option>
+              <option value="2024-2025">2024-2025</option>
+              <option value="2025-2026">2025-2026</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <!-- <label for="loc">Message:</label>
+            <textarea
+              class="form-control"
+              name="message"
+              id="message"
+              placeholder="Message"
+              required
+            ></textarea> -->
+
+            <div class="form-group mt-2">
+                <label for="media" class="form-check-label">Upload the Proof of Submission :</label>
+                <br>
+                <br>
+                <input class="form-control-file" type="file" name="media" id="media" requireed/>
+            </div>
+            <small class="text-muted">
+                    Only PDF and JPG allowed.
+                    Maximum 10MB.
+                </small>
+
+          <!-- <div class="form-group form-check mt-2">
+            <input class="form-check-input" type="checkbox" id="age" />
+            <label class="form-check-label" for="age"
+              >Check if you are over 18 years old</label
+            >
+          </div>
+          
+          <div class="form-group form-check">
+            <input class="form-check-input" type="checkbox" id="ex" required />
+            <label class="form-check-label" for="ex"
+              >By checking this box I certify that I am agree with the data
+              terms and policies.
+            </label> -->
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbxMJaH7uJJG3ebPiYAAzv9PL3nYNrsSGpfmvzJ79W9pUYitnQLGvLcqEwYyfQWBGFMl/exec";
+
+const form = document.forms["submit-to-google-sheet"];
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    // Checkbox values
+    // const ex = document.getElementById("ex").checked;
+    // const age = document.getElementById("age").checked;
+
+    // formData.append("age", age ? "Yes" : "No");
+    // formData.append("ex", ex ? "Yes" : "No");
+
+    // =========================
+    // FILE UPLOAD (PDF + JPG)
+    // =========================
+    const fileInput = document.getElementById("media");
+
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+
+        // 10MB LIMIT
+        if (file.size > 1024 * 1024 * 10) {
+            swal("Error", "File size should be less than 10MB.", "error");
+            return;
+        }
+
+        // ONLY PDF + JPG
+        const allowedTypes = ["application/pdf", "image/jpeg"];
+
+        if (!allowedTypes.includes(file.type)) {
+            swal("Error", "Only PDF and JPG files are allowed.", "error");
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = async function () {
+            const base64 = reader.result.split(",")[1];
+
+            // send file + type
+            formData.append("media", base64);
+            formData.append("mimeType", file.type);
+
+            await submitForm(formData);
+        };
+
+        reader.readAsDataURL(file);
+
+    } else {
+        // No file uploaded
+        await submitForm(formData);
+    }
+});
+
+
+// =========================
+// SUBMIT FUNCTION
+// =========================
+async function submitForm(formData) {
+
+    const submitButton = document.querySelector("button[type='submit']");
+    submitButton.disabled = true;
+    submitButton.innerText = "Loading...";
+
+    fetch(scriptURL, {
+        method: "POST",
+        body: formData
+    })
+    .then(() => {
+        swal("Done", "Submitted Successfully.", "success");
+        document.querySelector("form").reset();
+    })
+    .catch(() => {
+        swal("Error", "Something went wrong. Please try again!", "error");
+    })
+    .finally(() => {
+        submitButton.disabled = false;
+        submitButton.innerText = "Submit";
+    });
+}
+</script>
+  </body>
+</html>
