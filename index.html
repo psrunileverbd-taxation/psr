@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Proof of Submission (PSR) </title>
+    
     <link
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
@@ -23,11 +24,19 @@
       }
     </style>
   </head>
-  <body class="bg-light">
+ <body class="bg-light">
     <div class="container">
       <div class="form-container">
-        <h4 class="text-center mb-4">Proof of Submission (PSR) for <br> Unilever Bangladesh Limited</h4>
+        <h4 class="text-center mb-4">Proof of Submission (PSR) for <br> Unilever Bangladesh</h4>
         <form id="submit-to-google-sheet">
+          <div class="form-group">
+            <label for="loc">Entity Type :</label>
+            <select class="form-control" name="entity_type" id="entity_type" required>
+              <option value="" disabled selected hidden>Choose...</option>
+              <option value="individual">Individual</option>
+              <option value="company">Company</option>
+            </select>
+          </div>
           <div class="form-group">
             <label for="tin_no">TIN No :</label>
             <input
@@ -35,7 +44,7 @@
               type="text"
               name="tin_no"
               id="tin_no"
-              placeholder="12 Digit TIN"
+              placeholder=""
               required
             />
           </div>
@@ -46,7 +55,7 @@
               type="text"
               name="taxes_circle"
               id="taxes_circle"
-              placeholder="012"
+              placeholder=""
               required
             />
           </div>
@@ -57,7 +66,7 @@
               type="text"
               name="taxes_zone"
               id="taxes_zone"
-              placeholder="Dhaka"
+              placeholder=""
               required
             />
           </div>
@@ -69,7 +78,7 @@
               type="text"
               name="return_resgister"
               id="return_resgister"
-              placeholder="8261049792"
+              placeholder=""
               required
             />
           </div>
@@ -90,7 +99,6 @@
             <label for="loc">Assessment Year :</label>
             <select class="form-control" name="assess_year" id="assess_year" required>
               <option value="" disabled selected hidden>Choose...</option>
-              <option value="2023-2024">2023-2024</option>
               <option value="2024-2025">2024-2025</option>
               <option value="2025-2026">2025-2026</option>
             </select>
@@ -109,11 +117,11 @@
                 <label for="media" class="form-check-label">Upload the Proof of Submission :</label>
                 <br>
                 <br>
-                <input class="form-control-file" type="file" name="media" id="media" requireed/>
+                <input class="form-control-file" type="file" name="media" id="media" required/>
             </div>
             <small class="text-muted">
                     Only PDF and JPG allowed.
-                    Maximum 10MB.
+                    Maximum 4MB.
                 </small>
 
           <!-- <div class="form-group form-check mt-2">
@@ -138,7 +146,7 @@
     </div>
 
     <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxMJaH7uJJG3ebPiYAAzv9PL3nYNrsSGpfmvzJ79W9pUYitnQLGvLcqEwYyfQWBGFMl/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbwal2rRGY8ZFwfYsYSyYpwqpt_9397fJdyFlH_ahIrKqOVhldXxaGe9sx-i0TzWtL2f/exec";
 
 const form = document.forms["submit-to-google-sheet"];
 
@@ -163,8 +171,8 @@ form.addEventListener("submit", async (e) => {
         const file = fileInput.files[0];
 
         // 10MB LIMIT
-        if (file.size > 1024 * 1024 * 10) {
-            swal("Error", "File size should be less than 10MB.", "error");
+        if (file.size > 1024 * 1024 * 4) {
+            swal("Error", "File size should be less than 4MB.", "error");
             return;
         }
 
