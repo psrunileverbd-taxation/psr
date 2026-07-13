@@ -1,235 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Proof of Submission (PSR) </title>
-    
-    <link
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
-    <style>
-      .form-container {
-        max-width: 500px;
-        margin: auto;
-        margin-top: 50px;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-      }
-    </style>
-  </head>
- <body class="bg-light">
-    <div class="container">
-      <div class="form-container">
-        <h4 class="text-center mb-4">Proof of Submission (PSR) for <br> Unilever Bangladesh</h4>
-        <form id="submit-to-google-sheet">
-          <div class="form-group">
-            <label for="loc">Entity Type :</label>
-            <select class="form-control" name="entity_type" id="entity_type" required>
-              <option value="" disabled selected hidden>Choose...</option>
-              <option value="individual">Individual</option>
-              <option value="company">Company</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="tin_no">TIN No :</label>
-            <input
-              class="form-control"
-              type="text"
-              name="tin_no"
-              id="tin_no"
-              placeholder=""
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="taxes_circle">Taxes Circle :</label>
-            <input
-              class="form-control"
-              type="text"
-              name="taxes_circle"
-              id="taxes_circle"
-              placeholder=""
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="slip">Taxes Zone :</label>
-            <input
-              class="form-control"
-              type="text"
-              name="taxes_zone"
-              id="taxes_zone"
-              placeholder=""
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="return_resgister">Serial No. of Return Register :</label>
-            <input
-              class="form-control"
-              type="text"
-              name="return_resgister"
-              id="return_resgister"
-              placeholder=""
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="return_submission">Date of Return Submission :</label>
-            <input
-              class="form-control"
-              type="date"
-              name="return_submission"
-              id="return_submission"
-              placeholder=""
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="loc">Assessment Year :</label>
-            <select class="form-control" name="assess_year" id="assess_year" required>
-              <option value="" disabled selected hidden>Choose...</option>
-              <option value="2024-2025">2024-2025</option>
-              <option value="2025-2026">2025-2026</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <!-- <label for="loc">Message:</label>
-            <textarea
-              class="form-control"
-              name="message"
-              id="message"
-              placeholder="Message"
-              required
-            ></textarea> -->
-
-            <div class="form-group mt-2">
-                <label for="media" class="form-check-label">Upload the Proof of Submission :</label>
-                <br>
-                <br>
-                <input class="form-control-file" type="file" name="media" id="media" required/>
-            </div>
-            <small class="text-muted">
-                    Only PDF and JPG allowed.
-                    Maximum 4MB.
-                </small>
-
-          <!-- <div class="form-group form-check mt-2">
-            <input class="form-check-input" type="checkbox" id="age" />
-            <label class="form-check-label" for="age"
-              >Check if you are over 18 years old</label
-            >
-          </div>
-          
-          <div class="form-group form-check">
-            <input class="form-check-input" type="checkbox" id="ex" required />
-            <label class="form-check-label" for="ex"
-              >By checking this box I certify that I am agree with the data
-              terms and policies.
-            </label> -->
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">
-            Submit
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbwal2rRGY8ZFwfYsYSyYpwqpt_9397fJdyFlH_ahIrKqOVhldXxaGe9sx-i0TzWtL2f/exec";
-
-const form = document.forms["submit-to-google-sheet"];
-
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(form);
-
-    // Checkbox values
-    // const ex = document.getElementById("ex").checked;
-    // const age = document.getElementById("age").checked;
-
-    // formData.append("age", age ? "Yes" : "No");
-    // formData.append("ex", ex ? "Yes" : "No");
-
-    // =========================
-    // FILE UPLOAD (PDF + JPG)
-    // =========================
-    const fileInput = document.getElementById("media");
-
-    if (fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-
-        // 10MB LIMIT
-        if (file.size > 1024 * 1024 * 4) {
-            swal("Error", "File size should be less than 4MB.", "error");
-            return;
-        }
-
-        // ONLY PDF + JPG
-        const allowedTypes = ["application/pdf", "image/jpeg"];
-
-        if (!allowedTypes.includes(file.type)) {
-            swal("Error", "Only PDF and JPG files are allowed.", "error");
-            return;
-        }
-
-        const reader = new FileReader();
-
-        reader.onload = async function () {
-            const base64 = reader.result.split(",")[1];
-
-            // send file + type
-            formData.append("media", base64);
-            formData.append("mimeType", file.type);
-
-            await submitForm(formData);
-        };
-
-        reader.readAsDataURL(file);
-
-    } else {
-        // No file uploaded
-        await submitForm(formData);
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proof of Submission (PSR)</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+  <style>
+    .form-container {
+      max-width: 520px;
+      margin: auto;
+      margin-top: 40px;
+      padding: 25px 28px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      background-color: #fff;
+      border-radius: 18px;
     }
-});
+    h4 {
+      color: #1a2a3f;
+      font-weight: 600;
+    }
+    .form-control {
+      border-radius: 10px;
+      border: 1px solid #d2dce8;
+    }
+    .form-control:focus {
+      border-color: #1a6a9a;
+      box-shadow: 0 0 0 3px rgba(26, 106, 154, 0.12);
+    }
+    .btn-primary {
+      background: #1a5d8c;
+      border: none;
+      border-radius: 40px;
+      padding: 10px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover {
+      background: #0f4a72;
+    }
+    .btn-primary:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+    
+    /* Consent box - clean */
+    .consent-box {
+      background: #f6faff;
+      padding: 16px 18px;
+      border-radius: 14px;
+      border: 1.5px solid #e4edf6;
+      margin: 14px 0 12px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .consent-box:hover {
+      background: #f0f7ff;
+    }
+    .consent-box p {
+      margin: 0 0 4px 0;
+    }
+    .consent-box small {
+      display: block;
+      margin-top: 8px;
+    }
+    .privacy-link {
+      color: #0066a1;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1px solid #b6d2e8;
+    }
+    .privacy-link:hover {
+      border-bottom-color: #0066a1;
+    }
+    
+    /* Custom checkbox - BIGGER */
+    .consent-box input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      accent-color: #1a6a9a;
+      cursor: pointer;
+      flex-shrink: 0;
+      transform: scale(1.1);
+    }
+    .consent-box .checkbox-wrapper {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+    }
+    .consent-box .checkbox-text {
+      flex: 1;
+    }
+    .consent-box .checkbox-text p {
+      margin-top: 0;
+    }
+    
+    .file-hint {
+      font-size: 0.8rem;
+      color: #6a839e;
+    }
+    .radio-note {
+      font-size: 0.78rem;
+      color: #6a839e;
+      margin-top: 4px;
+    }
+    label {
+      font-weight: 500;
+      color: #1f374f;
+      font-size: 0.88rem;
+    }
+    .mt-2 { margin-top: 8px; }
+    .mb-1 { margin-bottom: 4px; }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container">
+    <div class="form-container">
+      <h4 class="text-center mb-4"><span style="font-weight: bold;">Proof of Submission (PSR)</span> <br> <span style="color: #4d6a87; margin-top: 4px; font-size: 1.2rem; font-weight: 600;">Unilever Bangladesh</span></h4>
+      
+      <form id="submit-to-google-sheet">
+        <!-- Entity Type -->
+        <div class="form-group">
+          <label for="entity_type">Entity Type<span style="color: #c0392b; margin-left: 2px;">*</span></label>
+          <select class="form-control" name="entity_type" id="entity_type" required>
+            <option value="" disabled selected hidden>Choose...</option>
+            <option value="individual">Individual</option>
+            <option value="company">Company</option>
+          </select>
+        </div>
+        
+        <!-- TIN -->
+        <div class="form-group">
+          <label for="tin_no">TIN No<span style="color: #c0392b; margin-left: 2px;">*</span></label>
+          <input class="form-control" type="text" name="tin_no" id="tin_no" placeholder="" required />
+        </div>
+        
+        <!-- Taxes Circle -->
+        <div class="form-group">
+          <label for="taxes_circle">Taxes Circle<span style="color: #c0392b; margin-left: 2px;">*</span></label>
+          <input class="form-control" type="text" name="taxes_circle" id="taxes_circle" placeholder="" required />
+        </div>
+        
+        <!-- Taxes Zone -->
+        <div class="form-group">
+          <label for="taxes_zone">Taxes Zone<span style="color: #c0392b; margin-left: 2px;">*</span></label>
+          <input class="form-control" type="text" name="taxes_zone" id="taxes_zone" placeholder="" required />
+        </div>
+        
+        <!-- Serial No -->
+        <div class="form-group">
+          <label for="return_resgister">Serial No. of Return Register<span style="color: #c0392b; margin-left: 2px;">*</span></label>
+          <input class="form-control" type="text" name="return_resgister" id="return_resgister" placeholder="" required />
+        </div>
+        
+        <!-- Date -->
+        <div class="form-group">
+          <label for="return_submission">Date of Return Submission<span style="color: #c0392b; margin-left: 2px;">*</span></label>
+          <input class="form-control" type="date" name="return_submission" id="return_submission" required />
+        </div>
+        
+        <!-- Assessment Year -->
+        <div class="form-group">
+          <label for="assess_year">Assessment Year<span style="color: #c0392b; margin-left: 2px;">*</span></label>
+          <select class="form-control" name="assess_year" id="assess_year" required>
+            <option value="" disabled selected hidden>Choose...</option>
+            <option value="2024-2025">2024-2025</option>
+            <option value="2025-2026">2025-2026</option>
+          </select>
+        </div>
+        
+        <!-- File Upload -->
+        <div class="form-group">
+          <label for="media">Upload the Proof of Submission<span style="color: #c0392b; margin-left: 2px;">*</span></label>
+          <input class="form-control-file" type="file" name="media" id="media" required style="padding: 8px 0;" />
+          <div class="file-hint">Only PDF and JPG allowed. Maximum 4MB.</div>
+        </div>
+        
+        <!-- ===== CHECKBOX with BIGGER size and functional ===== -->
+        <div class="consent-box">
+          <label class="checkbox-wrapper" style="display:flex; align-items:flex-start; gap:5px; cursor:pointer; margin:0;">
+            <input type="checkbox" name="consentCheckbox" id="consentCheckbox" value="agree" required style="width:18px; height:18px; margin-top:2px; accent-color:#1a6a9a; flex-shrink:0; cursor:pointer; border-radius: 6px" />
+            <span class="checkbox-text">
+              I share my information with consent and permit Unilever Bangladesh Ltd. &amp; Unilever Consumer Care Ltd. and associated parties to process, store my personal data (name, phone, TIN, etc.) and use for future reference with relevant third parties.
+              <br>
+              <small>
+                I have read, understood and agree to the 
+                <a href="https://www.unilevernotices.com/bangladesh/english/privacy-notice/notice.html" target="_blank" class="privacy-link" rel="noopener noreferrer">
+                  Privacy Notice
+                </a>
+              </small>
+            </span>
+          </label>
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary btn-block mt-3">
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
 
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxNP0xwpctrwDq8PCxOIteojnu3UGk8iLcbHIYj0ozeTWmgtlIUjGpbF4s6xqH06h1d/exec";
+    const form = document.forms["submit-to-google-sheet"];
 
-// =========================
-// SUBMIT FUNCTION
-// =========================
-async function submitForm(formData) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    const submitButton = document.querySelector("button[type='submit']");
-    submitButton.disabled = true;
-    submitButton.innerText = "Loading...";
+      // Check if checkbox is checked
+      const consentCheckbox = document.getElementById("consentCheckbox");
+      if (!consentCheckbox.checked) {
+        swal("Error", "Please agree to the consent terms by checking the box.", "error");
+        return;
+      }
 
-    fetch(scriptURL, {
+      const formData = new FormData(form);
+      formData.append("consent", consentCheckbox.checked ? "Agreed" : "Not Agreed");
+
+      // File validation
+      const fileInput = document.getElementById("media");
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        if (file.size > 1024 * 1024 * 4) {
+          swal("Error", "File size should be less than 4MB.", "error");
+          return;
+        }
+        const allowedTypes = ["application/pdf", "image/jpeg"];
+        if (!allowedTypes.includes(file.type)) {
+          swal("Error", "Only PDF and JPG files are allowed.", "error");
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = async function () {
+          const base64 = reader.result.split(",")[1];
+          formData.append("media", base64);
+          formData.append("mimeType", file.type);
+          await submitForm(formData);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        await submitForm(formData);
+      }
+    });
+
+    async function submitForm(formData) {
+      const submitButton = document.querySelector("button[type='submit']");
+      submitButton.disabled = true;
+      submitButton.innerText = "Loading...";
+
+      fetch(scriptURL, {
         method: "POST",
         body: formData
-    })
-    .then(() => {
-        swal("Done", "Submitted Successfully.", "success");
-        document.querySelector("form").reset();
-    })
-    .catch(() => {
-        swal("Error", "Something went wrong. Please try again!", "error");
-    })
-    .finally(() => {
-        submitButton.disabled = false;
-        submitButton.innerText = "Submit";
-    });
-}
-</script>
-  </body>
+      })
+        .then(() => {
+          swal("Done", "Submitted Successfully.", "success");
+          document.querySelector("form").reset();
+        })
+        .catch(() => {
+          swal("Error", "Something went wrong. Please try again!", "error");
+        })
+        .finally(() => {
+          submitButton.disabled = false;
+          submitButton.innerText = "Submit";
+        });
+    }
+  </script>
+</body>
 </html>
